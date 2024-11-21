@@ -13,9 +13,9 @@ import serve from 'rollup-plugin-serve'
 // config
 
 const basePath = '.'
-const globalName = 'LeaferX.selector' // <script /> 插件的全局变量名
-const supportPlatforms = ['web','worker','node','miniapp']
-const external = {'@leafer-ui/core':  'LeaferUI'} // 声明外部依赖，不打进插件包，只引用
+const globalName = 'LeaferX.auxiliaryline' // <script /> 插件的全局变量名
+const supportPlatforms = ['web', 'worker', 'node', 'miniapp']
+const external = { '@leafer-ui/core': 'LeaferUI' } // 声明外部依赖，不打进插件包，只引用
 
 const port = 12121 // visit http://localhost:12121
 
@@ -25,24 +25,24 @@ const port = 12121 // visit http://localhost:12121
 const isDev = process.env.NODE_ENV === 'development'
 const platformName = process.env.PLATFORM
 
-const platform ={
+const platform = {
     'all': {
         name: 'index', // output index.esm.js index.js
-        path:  basePath, 
+        path: basePath,
         withFormat: supportPlatforms.includes('node') ? ['cjs'] : false,
         withGlobal: globalName,
         withMin: 'min',
         external
     }
-} 
+}
 
-const plugins = [ 
+const plugins = [
     nodeResolve({
         browser: true,
         preferBuiltins: false,
     }),
-    typescript({ 
-        tsconfig: './tsconfig.json' 
+    typescript({
+        tsconfig: './tsconfig.json'
     }),
     commonjs()
 ]
@@ -51,7 +51,7 @@ const plugins = [
 let config
 
 
-if(isDev) {
+if (isDev) {
 
     config = {
         input: 'main.ts',
@@ -59,16 +59,16 @@ if(isDev) {
             file: 'dev/bundle.js',
             format: 'esm'
         },
-        watch: {  exclude: ['node_modules/**']  },
+        watch: { exclude: ['node_modules/**'] },
         plugins: [
             ...plugins,
-             html({
+            html({
                 title: "Leafer Plugin",
-                meta: [{charset: 'utf-8'}, {name: 'viewport', content: 'width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'}]
+                meta: [{ charset: 'utf-8' }, { name: 'viewport', content: 'width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' }]
             }),
-            copy({ targets: [{ src: 'public/*', dest: 'dev/' }]}),
+            copy({ targets: [{ src: 'public/*', dest: 'dev/' }] }),
             livereload(),
-            serve({contentBase: ['dev/'],  port})
+            serve({ contentBase: ['dev/'], port })
         ]
     }
 
@@ -76,22 +76,22 @@ if(isDev) {
 
     // build
 
-    config = [ { // types/index.d.ts
-        input:  basePath + '/src/index.ts',
+    config = [{ // types/index.d.ts
+        input: basePath + '/src/index.ts',
         output: {
             file: basePath + '/types/index.d.ts'
         },
-        plugins: [ dts()  ]
+        plugins: [dts()]
     }]
 
     let p = platform[platformName]
-    if(!(p instanceof Array)) p = [p]
+    if (!(p instanceof Array)) p = [p]
 
     const list = []
 
-    p.forEach(c =>{
-        
-        if(c.input && c.output) {
+    p.forEach(c => {
+
+        if (c.input && c.output) {
 
             list.push(c)
 
@@ -99,26 +99,26 @@ if(isDev) {
 
             const input = c.input || c.path + '/src/index.ts'
             const fileBase = c.path + '/dist/' + (c.name || platformName)
-            
+
             const global = c.withGlobal
             const min = c.withMin
             let external = c.external
 
-            list.push({external, input, output: fileBase + '.esm.js'})
-            if(c.withMin) list.push({ min, external, input, output: fileBase + '.esm.' + min + '.js'})
+            list.push({ external, input, output: fileBase + '.esm.js' })
+            if (c.withMin) list.push({ min, external, input, output: fileBase + '.esm.' + min + '.js' })
 
-            if(c.withFormat) {
-                c.withFormat.forEach(format =>{
+            if (c.withFormat) {
+                c.withFormat.forEach(format => {
                     const cjs = format === 'cjs'
-                    list.push({external, input, output: fileBase + (cjs ? '.cjs' : '.' + format + '.js'), format})
-                    if(c.withMin) list.push({ min, external, input, output: fileBase + (cjs ? '.' + min + '.cjs' :'.' + format + '.' + min + '.js'), format})
+                    list.push({ external, input, output: fileBase + (cjs ? '.cjs' : '.' + format + '.js'), format })
+                    if (c.withMin) list.push({ min, external, input, output: fileBase + (cjs ? '.' + min + '.cjs' : '.' + format + '.' + min + '.js'), format })
                 })
             }
-            
-            if(global) {
-                if(c.fullGlobal) external = null
-                list.push({global, external, input, output: fileBase + '.js'})
-                if(c.withMin) list.push({ global, min, external, input, output: fileBase + '.' + min + '.js'})
+
+            if (global) {
+                if (c.fullGlobal) external = null
+                list.push({ global, external, input, output: fileBase + '.js' })
+                if (c.withMin) list.push({ global, min, external, input, output: fileBase + '.' + min + '.js' })
             }
 
         }
@@ -131,7 +131,7 @@ if(isDev) {
             plugins: [...plugins]
         }
 
-        if(c.global) {
+        if (c.global) {
 
             item.output = {
                 file: c.output,
@@ -139,7 +139,7 @@ if(isDev) {
                 format: c.format || 'iife',
             }
 
-            if(c.external) item.output.globals = c.external
+            if (c.external) item.output.globals = c.external
 
         } else {
 
@@ -150,7 +150,7 @@ if(isDev) {
 
         }
 
-        if(c.min) item.plugins.push(terser({ format: { comments: false} }))
+        if (c.min) item.plugins.push(terser({ format: { comments: false } }))
 
         config.push(item)
 
