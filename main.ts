@@ -6,7 +6,8 @@ const app = new App({
 })
 
 const leafer = new Leafer()
-app.add(leafer)
+app.tree = leafer
+app.add(app.tree)
 
 
 const rect = new Rect({
@@ -29,8 +30,8 @@ const rect2 = new Rect({
     draggable: true,
 })
 
-leafer.add(rect)
-leafer.add(rect2)
+app.tree.add(rect)
+app.tree.add(rect2)
 
 const auxiliaryLine = new AuxiliaryLine(app, {
     itemClassName: ['.block']

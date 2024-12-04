@@ -1,3 +1,3 @@
 export { Selector, SelectEvent } from './Selector'
-export { AuxiliaryLine } from './Auxiliaryline'
+export { AuxiliaryLine } from './core/Auxiliaryline'
 
