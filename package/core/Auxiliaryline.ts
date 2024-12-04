@@ -1,15 +1,14 @@
 import { IApp, IUI } from '@leafer-ui/interface'
 
 interface Config {
-  itemClassName: string[]
+
 }
 
 export class AuxiliaryLine {
   private app: IApp
   private config: Config
-  private allItems: any[] = []
 
-  constructor(app: IApp, config: Config) {
+  constructor(app: IApp, config?: Config) {
     if (!app.isApp) {
       throw new Error('Leafer target must be an App')
     }
@@ -23,27 +22,18 @@ export class AuxiliaryLine {
     }
 
     this.app = app
-    this.config = config
-    this.allItems = this.findAllItems()
-    console.log('all items', this.allItems)
-    this.listenItemDrag()
+    this.config = config || {}
+    this.getElementsInViewport()
   }
 
-  findAllItems() {
-    return this.config.itemClassName.reduce((acc, item) => {
-      acc.push(...this.app.tree.find(item))
-      return acc
-    }, [])
-  }
   /**
-   * 监听元素的拖拽事件
+   * 获取视口所有的元素
    */
-  listenItemDrag() {
-    this.allItems.forEach(item => {
-      item.on('drag', (e: any) => {
-        const { x, y } = e
-        console.log('drag', x, y)
-      })
+  getElementsInViewport() {
+    const elements = this.app.tree.find(ele => {
+      const itemBoundingBox = ele.getLayoutBounds('box', this.app.tree)
+      console.log('itemBoundingBox', itemBoundingBox)
+      return 1
     })
   }
 }
