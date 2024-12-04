@@ -27,7 +27,7 @@ export class AuxiliaryLine {
   }
 
   /**
-   * 获取视口所有的元素
+   * 获取视口所有的元素的方法
    */
   getElementsInViewport() {
     const elements = this.app.tree.find(ele => {
