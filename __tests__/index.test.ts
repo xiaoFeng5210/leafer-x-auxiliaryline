@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 
-import { Selector } from "../src"
+import { Selector } from "../package"
 
 
 describe('selector', () => {

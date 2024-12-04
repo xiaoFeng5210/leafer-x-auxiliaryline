@@ -77,7 +77,7 @@ if (isDev) {
     // build
 
     config = [{ // types/index.d.ts
-        input: basePath + '/src/index.ts',
+        input: basePath + '/package/index.ts',
         output: {
             file: basePath + '/types/index.d.ts'
         },
@@ -97,7 +97,7 @@ if (isDev) {
 
         } else {
 
-            const input = c.input || c.path + '/src/index.ts'
+            const input = c.input || c.path + '/package/index.ts'
             const fileBase = c.path + '/dist/' + (c.name || platformName)
 
             const global = c.withGlobal

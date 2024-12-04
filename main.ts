@@ -1,11 +1,14 @@
-import { Rect, App } from 'leafer-ui'
 import { IApp } from '@leafer-ui/interface'
-import { AuxiliaryLine } from './src'
-import '@leafer-in/editor'
+import { AuxiliaryLine } from './package'
+import { App as LeaferEditorApp, Line, Rect } from 'leafer-editor'
 
-const app = new App({
+const app = new LeaferEditorApp({
     view: window,
-    editor: {}
+    editor: {},
+    zoom: {
+        min: 0.2,
+        max: 2,
+    },
 })
 
 const rect = new Rect({
@@ -15,7 +18,7 @@ const rect = new Rect({
     width: 100,
     height: 100,
     fill: '#32cd79',
-    draggable: true
+    editable: true,
 })
 
 const rect2 = new Rect({
@@ -25,8 +28,11 @@ const rect2 = new Rect({
     width: 100,
     height: 100,
     fill: '#32c0ff',
-    draggable: true
+    editable: true,
 })
+app.tree.add(rect)
+app.tree.add(rect2)
+
 const auxiliaryLine = new AuxiliaryLine(app as unknown as IApp, {
     itemClassName: ['.block']
 })
