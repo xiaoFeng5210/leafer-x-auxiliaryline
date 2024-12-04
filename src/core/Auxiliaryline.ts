@@ -1,14 +1,27 @@
-import { App, Group } from '@leafer-ui/core'
+import { IApp, IUI } from '@leafer-ui/interface'
 
 interface Config {
   itemClassName: string[]
 }
 
 export class AuxiliaryLine {
-  private app: App
+  private app: IApp
   private config: Config
   private allItems: any[] = []
-  constructor(app: App, config: Config) {
+
+  constructor(app: IApp, config: Config) {
+    if (!app.isApp) {
+      throw new Error('Leafer target must be an App')
+    }
+
+    if (!app.tree) {
+      throw new Error('tree layer is required')
+    }
+
+    if (!app.editor) {
+      throw new Error('Leafer editor plugin is required')
+    }
+
     this.app = app
     this.config = config
     this.allItems = this.findAllItems()
