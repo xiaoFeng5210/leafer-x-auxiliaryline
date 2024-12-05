@@ -1,4 +1,5 @@
 import { IApp, IUI } from '@leafer-ui/interface'
+import { calculateElementsInView } from '../utils/help'
 
 interface Config {
 
@@ -31,10 +32,18 @@ export class AuxiliaryLine {
    */
   getElementsInViewport() {
     const elements = this.app.tree.find(ele => {
+      if (ele.tag === 'Leafer') {
+        return 0
+      }
       const itemBoundingBox = ele.getLayoutBounds('box', this.app.tree)
-      console.log('itemBoundingBox', itemBoundingBox)
-      
-      return 1
+      const { x, y } = itemBoundingBox
+      const worldPoint = ele.getWorldPointByPage({ x, y })
+      return calculateElementsInView(worldPoint.x, worldPoint.y, itemBoundingBox, this.app.width, this.app.height)
     })
+
+    console.log('elements', elements)
+    return elements
   }
+
+
 }
