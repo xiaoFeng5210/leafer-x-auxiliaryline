@@ -33,6 +33,7 @@ export class AuxiliaryLine {
     const elements = this.app.tree.find(ele => {
       const itemBoundingBox = ele.getLayoutBounds('box', this.app.tree)
       console.log('itemBoundingBox', itemBoundingBox)
+      
       return 1
     })
   }
